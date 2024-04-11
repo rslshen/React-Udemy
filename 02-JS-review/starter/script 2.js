@@ -143,66 +143,11 @@ function getBook(id) {
   return data.find((d) => d.id === id);
 }
 
-// 1. Destructuring
-const book = getBook(2);
+// 1. Array.map()
+const books = getBooks();
+const essentialData = books.map((book) => ({
+  title: book.title,
+  author: book.author,
+}));
 
-// const title = book.title;
-// const author = book.author;
-
-const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
-  book;
-console.log(author, title, genres);
-
-// 2. Rest/spread operator
-
-// const primaryGenre = genres[0];
-// const secondaryGenre = genres[1];
-
-const [primaryGenre, secondaryGenre, ...otherGenres] = genres;
-console.log(primaryGenre, secondaryGenre, otherGenres);
-
-const newGenres = [...genres, "epic fantasy"];
-console.log(newGenres);
-
-const updatedBook = {
-  ...book,
-  // Add new properties to an object
-  moviePublicationDate: "2001-12-19",
-  // Overwrite an existing property
-  pages: 1210, // must after spreaded object (...book) in order to overwrite
-};
-updatedBook;
-
-// 3. Template literal
-const summary = `${title}, a ${pages}-page long book, was written by ${author} and published in ${
-  publicationDate.split("-")[0]
-}. The book has${hasMovieAdaptation ? "" : "not"} been adapted as a movie`;
-summary;
-
-// 4. Use ternaries instead of if/else
-const pagesRange = pages > 1000 ? "over a thousand" : "less than 1000";
-console.log(`The book has ${pagesRange} pages`);
-
-// 5. Arrow functions
-
-// function getYear(str) {
-//   return str.split("-")[0];
-// }
-
-const getYear = (str) => str.split("-")[0];
-console.log(getYear(publicationDate));
-
-// 6.
-// falsy value: 0. null. "", undefined
-console.log(true && "some string");
-console.log(0 && "some string");
-
-console.log(true || "string");
-console.log(false || "string");
-
-const spanishTranslation = book.translations.spanish || "NOT TRANSLATED";
-spanishTranslation;
-
-// ?? returns 0 or empty if the first argument exists, else return like ||
-const count = book.reviews.librarything.reviewsCount ?? "no data";
-count;
+essentialData;
