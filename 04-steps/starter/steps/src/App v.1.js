@@ -37,36 +37,21 @@ export default function App() {
             Step {step}: {messages[step - 1]}
           </p>
           <div className="buttons">
-            <Button
-              bgColor="#7959f2"
-              textColor="#fff"
+            <button
+              style={{ backgroundColor: "#7959f2", color: "#fff" }}
               onClick={handlePrevious}
-              text="Previous"
-              emoji="👈"
-            />
-            <Button
-              bgColor="#7959f2"
-              textColor="#fff"
+            >
+              Previous
+            </button>
+            <button
+              style={{ backgroundColor: "#7959f2", color: "#fff" }}
               onClick={handleNext}
-              text="Next"
-              emoji="👉"
-            />
+            >
+              Next
+            </button>
           </div>
         </div>
       )}
     </>
-  );
-}
-
-// Reusable button
-function Button({ textColor, bgColor, onClick, text, emoji }) {
-  return (
-    <button
-      style={{ backgroundColor: bgColor, color: textColor }}
-      onClick={onClick}
-    >
-      <span>{emoji}</span>
-      {text}
-    </button>
   );
 }
