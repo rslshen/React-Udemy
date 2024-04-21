@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 const containerStyle = {
   display: "flex",
@@ -11,13 +11,13 @@ const starContainerStyle = {
   display: "flex",
 };
 
-StarRating.propTypes = {
-  maxrating: PropTypes.number,
-  color: PropTypes.string,
-  size: PropTypes.number,
-  defaultRating: PropTypes.number,
-  messages: PropTypes.array,
-};
+// StarRating.propTypes = {
+//   maxrating: PropTypes.number,
+//   color: PropTypes.string,
+//   size: PropTypes.number,
+//   defaultRating: PropTypes.number,
+//   messages: PropTypes.array,
+// };
 
 export default function StarRating({
   maxRating = 5,
@@ -25,6 +25,7 @@ export default function StarRating({
   size = 48,
   defaultRating = 0,
   messages = [],
+  onRating,
 }) {
   // = default value
   const [rating, setRating] = useState(defaultRating);
@@ -37,16 +38,19 @@ export default function StarRating({
     fontSize: `${size / 1.5}px`,
   };
 
+  function handleRating(rating) {
+    setRating(rating);
+    onRating(rating);
+  }
+
   return (
     <div style={containerStyle}>
       <div style={starContainerStyle}>
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
+            onRate={() => handleRating(i + 1)}
             full={tempRating ? tempRating >= i + 1 : rating >= i + 1} // for each star, true/false, compare the current rating to the current number of stars
-            onClick={() => {
-              setRating(i + 1);
-            }}
             onHoverIn={() => setTempRating(i + 1)}
             onHoverOut={() => setTempRating(0)}
             color={color}
@@ -63,7 +67,7 @@ export default function StarRating({
   );
 }
 
-function Star({ onClick, full, onHoverIn, onHoverOut, color, size }) {
+function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
   const starStyle = {
     width: "48px",
     height: "48px",
@@ -77,7 +81,7 @@ function Star({ onClick, full, onHoverIn, onHoverOut, color, size }) {
     <span
       role="button"
       style={starStyle}
-      onClick={onClick}
+      onClick={onRate}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
     >
