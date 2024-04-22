@@ -51,7 +51,7 @@ import StarRating from "./StarRating";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = "34927195";
+const KEY = "34927195"; // my own OMDb api key
 
 export default function App() {
   const [query, setQuery] = useState("");
@@ -77,15 +77,26 @@ export default function App() {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
+  useEffect(function () {
+    document.addEventListener("keydown", function (e) {
+      if (e.code === "Escape") {
+        handleCloseMovie();
+      }
+    });
+  }, []); // exit movie details view when press 'Esc' key
+
   useEffect(
     function () {
+      const controller = new AbortController(); // a browser API
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError("");
 
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal } // for aborting fetch
           );
 
           if (!res.ok) {
@@ -99,8 +110,11 @@ export default function App() {
           }
 
           setMovies(data.Search);
+          setError("");
         } catch (err) {
-          setError(err.message);
+          if (err.name !== "AbortError") {
+            setError(err.message);
+          }
         } finally {
           setIsLoading(false);
         }
@@ -110,7 +124,11 @@ export default function App() {
         setError("");
         return;
       }
+      handleCloseMovie();
       fetchMovies();
+      return function () {
+        controller.abort(); // clean up effect
+      };
     },
     [query]
   ); // dependency array, only run when first mount
@@ -300,16 +318,44 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   useEffect(
     function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  ); // exit movie details view when press 'Esc' key
+
+  useEffect(
+    function () {
       async function getMovieDetails() {
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
         );
-        const data = await res.json();
-        setMovie(data);
+        const data = await res.json(); // parse JSON
+        setMovie(data); // update the 'movie' state
       }
-      getMovieDetails();
+      getMovieDetails(); // call immediately when mount or when selectedId changes
     },
     [selectedId]
+  );
+
+  useEffect(
+    function () {
+      document.title = title ? `Movie | ${title}` : "usePopcorn";
+
+      return function () {
+        document.title = "usePopcorn"; // clean up effect
+      };
+    },
+    [title]
   );
 
   return (
