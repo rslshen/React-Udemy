@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
-import { useKey } from "./useKey";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -113,11 +112,21 @@ function Logo() {
 function Search({ query, setQuery }) {
   const inputEl = useRef(null);
 
-  useKey("Enter", function () {
-    if (document.activeElement === inputEl.current) return; // prevent repetitive focus when typing
-    inputEl.current.focus(); // focus on search input
-    setQuery(""); // clear search input
-  });
+  useEffect(
+    function () {
+      const callback = (e) => {
+        if (document.activeElement === inputEl.current) return; // prevent repetitive focus when typing
+
+        if (e.code === "Enter") {
+          inputEl.current.focus(); // focus on search input
+          setQuery(""); // clear search input
+        }
+      };
+      document.addEventListener("keydown", callback); // add event listener
+      return () => document.removeEventListener("keydown", callback); // clean up effect
+    },
+    [setQuery]
+  );
 
   return (
     <input
@@ -227,7 +236,22 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onCloseMovie();
   }
 
-  useKey("Escape", onCloseMovie);
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  ); // exit movie details view when press 'Esc' key
 
   useEffect(
     function () {
