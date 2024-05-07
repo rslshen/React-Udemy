@@ -35,7 +35,6 @@ function CitiesProvider({ children }) {
       console.error("Error loading data from the server", error);
     } finally {
       setIsLoading(false);
-      console.log("Cities loaded");
     }
   }
 
