@@ -25,16 +25,40 @@
       "id": "17806751"
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "id": "a059",
+      "cityName": "Neuvy-Saint-Sepulchre",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2024-05-14T16:58:25.759Z",
+      "notes": "",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": "98443197"
+        "lat": "46.619261036171515",
+        "lng": "1.8017578125000002"
+      }
+    },
+    {
+      "id": "5c90",
+      "cityName": "Jingzhou",
+      "country": "China",
+      "emoji": "🇨🇳",
+      "date": "2024-05-14T16:58:33.509Z",
+      "notes": "",
+      "position": {
+        "lat": "29.84064389983441",
+        "lng": "113.20312500000001"
+      }
+    },
+    {
+      "id": "2e63",
+      "cityName": "Albany",
+      "country": "United States of America (the)",
+      "emoji": "🇺🇸",
+      "date": "2024-05-14T16:59:03.302Z",
+      "notes": "",
+      "position": {
+        "lat": "40.64730356252251",
+        "lng": "-75.93750000000001"
+      }
     }
   ]
 }
